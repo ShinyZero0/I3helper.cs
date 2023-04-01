@@ -16,6 +16,7 @@ using MessagePipe.Interprocess;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using H.Pipes;
+using H.Formatters;
 
 namespace I3IPC;
 
@@ -24,12 +25,10 @@ internal class Program
     private static async Task Main(string[] args)
     {
         var wsChecking = Task.Run(() => CheckWorkspaceChanges());
-        await using var server = new PipeServer<string>("I3Server.cs");
+        await using var server = new PipeServer<string>("I3Server.cs", formatter: new SystemTextJsonFormatter());
         server.ClientConnected += async (o, args) =>
         {
             Console.WriteLine($"Client {args.Connection.PipeName} is now connected!");
-
-            await args.Connection.WriteAsync("darova");
         };
 
         server.ClientDisconnected += (o, args) =>
@@ -47,6 +46,11 @@ internal class Program
         await server.StartAsync();
 
         await wsChecking;
+    }
+
+    public void Swallow()
+    {
+        
     }
 
     public static List<Workspace> GetWorkspaces()
