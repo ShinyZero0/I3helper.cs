@@ -23,7 +23,6 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
-        _messages["LastWorkspace"] = GoToLastWorkspace;
         var wsChecking = Task.Run(() => CheckWorkspaceChanges());
         await using var server = new PipeServer<string>("I3Server.cs");
         server.ClientConnected += async (o, args) =>
@@ -56,11 +55,15 @@ internal class Program
         return JsonConvert.DeserializeObject<List<Workspace>>(json)!;
     }
 
-    private static Dictionary<string, Action> _messages = new Dictionary<string, Action>();
-    private static Action GoToLastWorkspace = () =>
+    private static Dictionary<string, Action> _messages = new Dictionary<string, Action>()
     {
-        SendMessage("workspace " + OldWorkspace.Name);
+        { "LastWorkspace", GoToLastWorkspace }
     };
+    private static void GoToLastWorkspace()
+    {
+        if (OldWorkspace != null)
+            SendMessage("workspace " + OldWorkspace.Name);
+    }
 
     public static async void CheckWorkspaceChanges()
     {
@@ -70,7 +73,7 @@ internal class Program
             changes.Start();
             Console.WriteLine("it started");
             changes.WaitForExit();
-            var lastchange = JsonConvert.DeserializeObject<WorkspaceChanged>(
+            var lastchange = JsonConvert.DeserializeObject<WorkspaceChangedEvent>(
                 changes.StandardOutput.ReadToEnd()
             );
             if (lastchange.Change == "focus")
@@ -83,8 +86,6 @@ internal class Program
 
     public static Workspace? OldWorkspace;
 
-    // public Workspace NewWorkspace;
-    // public static WorkspaceChanged SubscribeToWokrspaceChanges
     public static string SendMessage(string message)
     {
         Process i3message = NewMessage(message);
@@ -107,16 +108,4 @@ internal class Program
         };
         return i3message;
     }
-}
-
-public class WorkspaceChanged
-{
-    [JsonProperty("change")]
-    public string Change;
-
-    [JsonProperty("old")]
-    public Workspace? OldWorkspace;
-
-    [JsonProperty("current")]
-    public Workspace? NewWorkspace;
 }
