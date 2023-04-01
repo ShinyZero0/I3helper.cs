@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "I3IPC", "..\I3IPC\I3IPC.csproj", "{763BE699-91D9-405E-812F-09ED87FC0216}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "I3IPC", ".\I3IPC\I3IPC.csproj", "{763BE699-91D9-405E-812F-09ED87FC0216}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "I3Client", "..\I3Client\I3Client.csproj", "{4450C8AC-CAB5-4BDB-81E7-F8178DED9B36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "I3Client", ".\I3Client\I3Client.csproj", "{4450C8AC-CAB5-4BDB-81E7-F8178DED9B36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
