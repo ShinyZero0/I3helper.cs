@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 namespace I3IPC;
-public class WorkspaceChangedEvent
+public class WorkspaceChanged
 {
     [JsonProperty("change")]
     public string Change;
