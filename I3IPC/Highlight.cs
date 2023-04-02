@@ -12,11 +12,20 @@ public class Highlight
     public Color Indicator;
     public Color ChildBorder;
 
-    public string ToString()
+    public override string ToString()
     {
         ColorTranslator.ToHtml(this.Indicator);
-        return String.Format(
-            $"{this.Name} {this.Border.ToHtml()} {this.Background.ToHtml()} {this.Text.ToHtml()} {this.Indicator.ToHtml()} {this.ChildBorder.ToHtml()}"
+        return String.Join(
+            ' ',
+            new string[]
+            {
+                this.Name,
+                this.Border.ToHtml(),
+                this.Background.ToHtml(),
+                this.Text.ToHtml(),
+                this.Indicator.ToHtml(),
+                this.ChildBorder.ToHtml(),
+            }
         );
     }
 }
