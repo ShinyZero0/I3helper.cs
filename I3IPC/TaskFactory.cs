@@ -30,6 +30,7 @@ public partial class I3
                     var variable = new Variable(pair.Key, pair.Value);
                     generatedConfigContent.Add(variable.ToString());
                 }
+                // generatedConfigContent.Add("smart_borders off\n");
                 generatedConfigContent.Add(
                     "client.focused $active $active $active $indicator $border"
                 );

@@ -6,4 +6,6 @@ public class Container
 {
     [JsonProperty("id")]
     long Id;
+	[JsonProperty("window_properties")]
+	WindowProperties Properties;
 }

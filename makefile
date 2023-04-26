@@ -1,4 +1,5 @@
 run-ipc:
+	-pkill I3IPC 
 	dotnet run --project ./I3IPC/
 
 run-client:
@@ -6,4 +7,4 @@ run-client:
 
 sln:
 	-pkill I3IPC 
-	dotnet publish -c Release ./I3IPCsln.sln -o ./bin
+	dotnet publish -c Release ./I3IPCsln.sln -o ./out

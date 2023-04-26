@@ -8,13 +8,17 @@ public partial class I3
 {
     public Workspace? OldWorkspace;
     public I3Config MainConfig;
+    public GeneratedConfig GeneratedConfig;
     public Dictionary<string, string> Variables = new();
     public string ConfigDir;
-    public string GeneratedConfigDir => Path.Combine(ConfigDir, "generated") ;
 
-    // public I3()
-    // {
-    // }
+    public I3()
+    {
+        ConfigDir = Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "i3");
+        GeneratedConfig = new(Path.Combine(ConfigDir, "generated"));
+        SendMessage("-t get_version");
+    }
+
     public string SendMessage(string message)
     {
         Process i3message = NewMessage(message);
@@ -33,7 +37,6 @@ public partial class I3
             {
                 FileName = "i3-msg",
                 Arguments = args,
-                // UseShellExecute = true
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             }
@@ -41,40 +44,57 @@ public partial class I3
         return i3message;
     }
 
-    public async void CheckWindowChanges()
-    {
-        var subscription = NewMessage(Commands.Subscribe("window"));
-        while (true)
-        {
-            subscription.Start();
-            subscription.WaitForExit();
-            var change = JsonConvert.DeserializeObject<WindowChanged>(
-                subscription.StandardOutput.ReadToEnd()
-            );
-            if (change.Change == WindowChanged.ChangeTypes.New) { }
-        }
-    }
+    // public void CheckWindowChanges()
+    // {
+    //     var subscription = NewMessage(Commands.Subscribe("window"));
+    //     while (true)
+    //     {
+    //         subscription.Start();
+    //         subscription.WaitForExit();
+    //         var change = JsonConvert.DeserializeObject<WindowChanged>(
+    //             subscription.StandardOutput.ReadToEnd()
+    //         );
+    //         if (change.Change == WindowChanged.ChangeTypes.New) { }
+    //     }
+    // }
 
     public async void CheckWorkspaceChanges()
     {
-        var sub = NewMessage(Commands.Subscribe("workspace"));
-        sub.Start();
-        var reactiveSub = Observable.FromEventPattern<
-            DataReceivedEventHandler,
-            DataReceivedEventArgs
-        >((hand) => sub.OutputDataReceived += hand, (hand) => sub.OutputDataReceived -= hand);
-        var disposableSub = reactiveSub.Subscribe(info =>
+        using (Process sub = NewMessage(Commands.Subscribe("workspace")))
         {
-            var change = JsonConvert.DeserializeObject<WorkspaceChanged>(info.EventArgs.Data);
-            if (change.Change == "focus")
+            sub.Start();
+            var reactiveSub = Observable.FromEventPattern<
+                DataReceivedEventHandler,
+                DataReceivedEventArgs
+            >((hand) => sub.OutputDataReceived += hand, (hand) => sub.OutputDataReceived -= hand);
+            var disposableSub = reactiveSub.Subscribe(info =>
             {
-                OldWorkspace = change.OldWorkspace;
-            }
-        });
-        sub.BeginOutputReadLine();
-        await sub.WaitForExitAsync();
-        sub.Dispose();
-        disposableSub.Dispose();
+                var change = JsonConvert.DeserializeObject<WorkspaceChanged>(info.EventArgs.Data!)!;
+                if (change.Change == "focus")
+                {
+                    OldWorkspace = change.OldWorkspace;
+                    if (change.NewWorkspace!.Name == "3")
+                    {
+                        this.GeneratedConfig.KeyBindings.Remove("Next");
+                        this.GeneratedConfig.KeyBindings.Remove("Prior");
+                        GeneratedConfig.Refresh(this);
+                    }
+                    else
+                    {
+                        this.GeneratedConfig.KeyBindings["Prior"] =
+                            "exec --no-startup-id \"~/.scripts/HalfPage.nu up\"";
+                        this.GeneratedConfig.KeyBindings["Next"] =
+                            "exec --no-startup-id \"~/.scripts/HalfPage.nu down\"";
+                        GeneratedConfig.Refresh(this);
+                    }
+                }
+            });
+            sub.BeginOutputReadLine();
+            Task wait = sub.WaitForExitAsync();
+            await wait;
+            wait.Dispose();
+            disposableSub.Dispose();
+        }
     }
 
     public async void CheckBindings()
@@ -88,24 +108,24 @@ public partial class I3
             >((hand) => sub.OutputDataReceived += hand, (hand) => sub.OutputDataReceived -= hand);
             var disposableSub = reactiveSub.Subscribe(async info =>
             {
-                Console.WriteLine("Event received");
                 var change = JsonConvert.DeserializeObject<BindingChanged>(info.EventArgs.Data);
-                if (change.Binding.Command.Contains("split"))
-                {
-                    // BorderColorTaskFactory.DisposeTasks();
-                    var task = NewBorderColorTask();
-                    task.Start();
-                    await task;
-                    task.Dispose();
-                }
+                // if (change.Binding.Command.Contains("split"))
+                // {
+                //     var task = NewBorderColorTask();
+                //     task.Start();
+                //     await task;
+                //     task.Dispose();
+                // }
             });
             sub.BeginOutputReadLine();
             await sub.WaitForExitAsync();
             disposableSub.Dispose();
         }
     }
+
     public void Swallow() { }
 
+    // public List<Workspace> ;
 
     public List<Workspace> GetWorkspaces()
     {

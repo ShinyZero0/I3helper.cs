@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-
 using Newtonsoft.Json;
 using System.Reactive.Linq;
 using H.Pipes;
@@ -13,16 +12,14 @@ internal static class Program
     private static async Task Main(string[] args)
     {
         I3Instance = new();
-        I3Instance.ConfigDir = Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "i3");
-        I3Instance.SendMessage("-t get_version");
 
         I3Instance.MainConfig = JsonConvert.DeserializeObject<I3Config>(
             I3Instance.SendMessage("-t get_config --raw")
         );
-        foreach (var entry in I3Instance.MainConfig.IncludedConfigs)
-        {
-            Console.WriteLine(entry.Path);
-        }
+        // foreach (var entry in I3Instance.MainConfig.IncludedConfigs)
+        // {
+        //     Console.WriteLine(entry.Path);
+        // }
 
         var wsChecking = Task.Run(() => I3Instance.CheckWorkspaceChanges());
         var bindChecking = Task.Run(() => I3Instance.CheckBindings());
@@ -45,7 +42,6 @@ internal static class Program
             if (_messages.ContainsKey(args.Message))
                 _messages[args.Message]();
         };
-        // server.ExceptionOccurred += (o, args) => OnExceptionOccurred(args.Exception);
 
         await server.StartAsync();
 
@@ -59,10 +55,10 @@ internal static class Program
         await server.StopAsync();
         await server.DisposeAsync();
     }
-private static Dictionary<string, Action> _messages = new Dictionary<string, Action>()
-{
-    { "LastWorkspace", () => I3Instance.GoToLastWorkspace() }
-};
-private static I3 I3Instance;
 
+    static I3 I3Instance;
+    static Dictionary<string, Action> _messages = new Dictionary<string, Action>()
+    {
+        { "LastWorkspace", () => I3Instance.GoToLastWorkspace() }
+    };
 }

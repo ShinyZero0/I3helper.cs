@@ -4,8 +4,9 @@ using System;
 
 namespace I3IPC;
 
-public class I3Config
+public class I3Config : Config
 {
     [JsonProperty("included_configs")]
     public Config[] IncludedConfigs;
+	public I3Config(string path) : base(path) {  }
 }

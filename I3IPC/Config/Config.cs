@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+
 namespace I3IPC;
 public class Config
 {
@@ -6,4 +7,8 @@ public class Config
     public string Content;
     [JsonProperty("path")]
     public string Path;
+	public Config(string path)
+	{
+		this.Path = path;
+	}
 }
