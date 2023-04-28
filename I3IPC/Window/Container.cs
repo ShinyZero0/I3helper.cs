@@ -1,11 +1,14 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace I3IPC;
 
 public class Container
 {
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
+    [JsonInclude]
     long Id;
-	[JsonProperty("window_properties")]
-	WindowProperties Properties;
+
+    [JsonPropertyName("window_properties")]
+    [JsonInclude]
+    WindowProperties Properties;
 }

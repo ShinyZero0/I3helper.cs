@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System.IO;
 using System;
 
@@ -6,7 +6,8 @@ namespace I3IPC;
 
 public class I3Config : Config
 {
-    [JsonProperty("included_configs")]
+    [JsonPropertyName("included_configs")]
+	[JsonInclude]
     public Config[] IncludedConfigs;
 	public I3Config(string path) : base(path) {  }
 }

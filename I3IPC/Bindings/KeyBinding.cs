@@ -1,7 +1,8 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 namespace I3IPC;
 public class KeyBinding
 {
-    [JsonProperty("command")]
+    [JsonPropertyName("command")]
+	[JsonInclude]
     public string Command;
 }

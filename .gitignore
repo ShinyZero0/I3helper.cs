@@ -4,6 +4,9 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 # vim
 .local-history
+zellij.kdl
+.direnv/
+out/
 
 # User-specific files
 data.json

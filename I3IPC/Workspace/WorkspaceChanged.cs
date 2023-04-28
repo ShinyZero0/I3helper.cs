@@ -1,13 +1,16 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 namespace I3IPC;
 public class WorkspaceChanged
 {
-    [JsonProperty("change")]
+    [JsonPropertyName("change")]
+	[JsonInclude]
     public string Change;
 
-    [JsonProperty("old")]
+    [JsonPropertyName("old")]
+	[JsonInclude]
     public Workspace? OldWorkspace;
 
-    [JsonProperty("current")]
+    [JsonPropertyName("current")]
+	[JsonInclude]
     public Workspace? NewWorkspace;
 }

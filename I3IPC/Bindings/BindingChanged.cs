@@ -1,7 +1,8 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 namespace I3IPC;
 public class BindingChanged
 {
-    [JsonProperty("binding")]
+    [JsonPropertyName("binding")]
+	[JsonInclude]
     public KeyBinding Binding;
 }

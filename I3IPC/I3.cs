@@ -1,16 +1,19 @@
-using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Runtime.Serialization;
+using System.Net.Sockets;
+using System.Text;
+using System.Text.Json;
 
 namespace I3IPC;
 
 public partial class I3
 {
-    public Workspace? OldWorkspace;
+    Workspace? OldWorkspace;
     public I3Config MainConfig;
-    public GeneratedConfig GeneratedConfig;
-    public Dictionary<string, string> Variables = new();
-    public string ConfigDir;
+    GeneratedConfig GeneratedConfig;
+    Dictionary<string, string> Variables = new();
+    string ConfigDir;
 
     public I3()
     {
@@ -21,12 +24,14 @@ public partial class I3
 
     public string SendMessage(string message)
     {
-        Process i3message = NewMessage(message);
-        i3message.Start();
-        i3message.WaitForExit();
-        string result = i3message.StandardOutput.ReadToEnd();
-        i3message.Dispose();
-        return result;
+        using (Process i3message = NewMessage(message))
+        {
+            i3message.Start();
+            i3message.WaitForExit();
+            string result = i3message.StandardOutput.ReadToEnd();
+			GC.Collect();
+            return result;
+        }
     }
 
     public Process NewMessage(string args)
@@ -69,7 +74,9 @@ public partial class I3
             >((hand) => sub.OutputDataReceived += hand, (hand) => sub.OutputDataReceived -= hand);
             var disposableSub = reactiveSub.Subscribe(info =>
             {
-                var change = JsonConvert.DeserializeObject<WorkspaceChanged>(info.EventArgs.Data!)!;
+                WorkspaceChanged change = JsonSerializer.Deserialize<WorkspaceChanged>(
+                    info.EventArgs.Data!
+                )!;
                 if (change.Change == "focus")
                 {
                     OldWorkspace = change.OldWorkspace;
@@ -88,6 +95,7 @@ public partial class I3
                         GeneratedConfig.Refresh(this);
                     }
                 }
+				GC.Collect();
             });
             sub.BeginOutputReadLine();
             Task wait = sub.WaitForExitAsync();
@@ -108,7 +116,7 @@ public partial class I3
             >((hand) => sub.OutputDataReceived += hand, (hand) => sub.OutputDataReceived -= hand);
             var disposableSub = reactiveSub.Subscribe(async info =>
             {
-                var change = JsonConvert.DeserializeObject<BindingChanged>(info.EventArgs.Data);
+                var change = JsonSerializer.Deserialize<BindingChanged>(info.EventArgs.Data);
                 // if (change.Binding.Command.Contains("split"))
                 // {
                 //     var task = NewBorderColorTask();
@@ -118,24 +126,30 @@ public partial class I3
                 // }
             });
             sub.BeginOutputReadLine();
-            await sub.WaitForExitAsync();
+            await sub.WaitForExitAsync().ConfigureAwait(false);
             disposableSub.Dispose();
         }
     }
 
-    public void Swallow() { }
-
-    // public List<Workspace> ;
-
     public List<Workspace> GetWorkspaces()
     {
         string json = SendMessage("-t get_workspaces");
-        return JsonConvert.DeserializeObject<List<Workspace>>(json)!;
+        return JsonSerializer.Deserialize<List<Workspace>>(json)!;
     }
 
     public void GoToLastWorkspace()
     {
         if (OldWorkspace != null)
             SendMessage("workspace " + OldWorkspace.Name);
+    }
+
+    void DetectByteOrder()
+    {
+        string byteorder;
+        string unixSocket = Environment.GetEnvironmentVariable("I3SOCK");
+        Socket sock = new(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
+        UnixDomainSocketEndPoint ep = new(unixSocket);
+        sock.Connect(ep);
+        sock.Send(Encoding.ASCII.GetBytes(""));
     }
 }

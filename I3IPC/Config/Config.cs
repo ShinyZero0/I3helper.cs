@@ -1,14 +1,19 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace I3IPC;
+
 public class Config
 {
-    [JsonProperty("variable_replaced_contents")]
+    [JsonPropertyName("variable_replaced_contents")]
+    [JsonInclude]
     public string Content;
-    [JsonProperty("path")]
+
+    [JsonPropertyName("path")]
+    [JsonInclude]
     public string Path;
-	public Config(string path)
-	{
-		this.Path = path;
-	}
+
+    public Config(string path)
+    {
+        this.Path = path;
+    }
 }

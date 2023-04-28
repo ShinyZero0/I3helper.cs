@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System.Reactive.Linq;
 using H.Pipes;
 using H.Formatters;
@@ -13,13 +13,9 @@ internal static class Program
     {
         I3Instance = new();
 
-        I3Instance.MainConfig = JsonConvert.DeserializeObject<I3Config>(
+        I3Instance.MainConfig = JsonSerializer.Deserialize<I3Config>(
             I3Instance.SendMessage("-t get_config --raw")
-        );
-        // foreach (var entry in I3Instance.MainConfig.IncludedConfigs)
-        // {
-        //     Console.WriteLine(entry.Path);
-        // }
+        )!;
 
         var wsChecking = Task.Run(() => I3Instance.CheckWorkspaceChanges());
         var bindChecking = Task.Run(() => I3Instance.CheckBindings());

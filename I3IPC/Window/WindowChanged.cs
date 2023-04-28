@@ -1,13 +1,15 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace I3IPC;
 
 public class WindowChanged
 {
-    [JsonProperty("change")]
+    [JsonPropertyName("change")]
+	[JsonInclude]
     public ChangeTypes Change;
 
-    [JsonProperty("container")]
+    [JsonPropertyName("container")]
+	[JsonInclude]
     public Container Container;
 
     public enum ChangeTypes

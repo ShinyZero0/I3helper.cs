@@ -1,7 +1,8 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 public class WindowProperties
 {
-    [JsonProperty("class")]
+    [JsonPropertyName("class")]
+	[JsonInclude]
     public string Class;
 }

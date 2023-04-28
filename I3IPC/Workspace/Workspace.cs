@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace I3IPC;
 
@@ -9,21 +9,27 @@ public class Workspace
         Console.WriteLine(this.Name);
     }
 
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
+	[JsonInclude]
     public long Id;
 
-    [JsonProperty("num")]
+    [JsonPropertyName("num")]
+	[JsonInclude]
     public int Num;
 
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
+	[JsonInclude]
     public string Name;
 
-    [JsonProperty("visible")]
+    [JsonPropertyName("visible")]
+	[JsonInclude]
     public bool IsVisible;
 
-    [JsonProperty("focused")]
+    [JsonPropertyName("focused")]
+	[JsonInclude]
     public bool IsFocused;
 
-    [JsonProperty("urgent")]
+    [JsonPropertyName("urgent")]
+	[JsonInclude]
     public bool IsUrgent;
 }
