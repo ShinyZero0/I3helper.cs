@@ -41,11 +41,7 @@ internal static class Program
 
         await server.StartAsync();
 
-        await Task.Run(() =>
-        {
-            while (true)
-                Thread.Sleep(TimeSpan.FromDays(10));
-        });
+		await Task.Delay(int.MaxValue);
         await wsChecking;
         await bindChecking;
         await server.StopAsync();
