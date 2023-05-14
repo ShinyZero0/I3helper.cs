@@ -1,6 +1,6 @@
 using System;
 
-namespace I3IPC;
+namespace I3Helper;
 
 public class Commands
 {

@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 // using H.Pipes;
 // using H.Formatters;
 
-namespace I3IPC;
+namespace I3Helper;
 
 internal static class Program
 {

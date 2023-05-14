@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using System.IO;
 using System;
 
-namespace I3IPC;
+namespace I3Helper;
 
 public class I3Config : Config
 {

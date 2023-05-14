@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace I3IPC;
+namespace I3Helper;
 
 public class Config
 {

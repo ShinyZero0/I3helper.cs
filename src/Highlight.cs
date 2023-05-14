@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace I3IPC;
+namespace I3Helper;
 
 public class Highlight
 {

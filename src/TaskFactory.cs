@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Collections;
 
-namespace I3IPC;
+namespace I3Helper;
 
 public partial class I3
 {

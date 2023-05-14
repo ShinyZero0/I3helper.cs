@@ -1,4 +1,4 @@
-namespace I3IPC;
+namespace I3Helper;
 
 public class GeneratedConfig : Config
 {
