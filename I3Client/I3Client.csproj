@@ -6,7 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <!-- <PublishSingleFile>true</PublishSingleFile> -->
-    <PublishAOT>true</PublishAOT>
+		<PublishAOT>true</PublishAOT>
+		<StripSymbols>true</StripSymbols>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
