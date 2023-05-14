@@ -1,8 +1,10 @@
 using System.Text.Json.Serialization;
+
 namespace I3IPC;
+
 public class BindingChanged
 {
     [JsonPropertyName("binding")]
-	[JsonInclude]
+    [JsonInclude]
     public KeyBinding Binding;
 }
