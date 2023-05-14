@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Reactive.Linq;
-using System.Runtime.Serialization;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
@@ -17,7 +16,7 @@ public partial class I3
 
     public I3()
     {
-        ConfigDir = Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "i3");
+        ConfigDir = Path.Combine(Environment.GetEnvironmentVariable("HOME")!, ".config", "i3");
         GeneratedConfig = new(Path.Combine(ConfigDir, "generated"));
         SendMessage("-t get_version");
     }
@@ -29,7 +28,7 @@ public partial class I3
             i3message.Start();
             i3message.WaitForExit();
             string result = i3message.StandardOutput.ReadToEnd();
-			GC.Collect();
+            i3message.Dispose();
             return result;
         }
     }
@@ -95,7 +94,6 @@ public partial class I3
                         GeneratedConfig.Refresh(this);
                     }
                 }
-				GC.Collect();
             });
             sub.BeginOutputReadLine();
             Task wait = sub.WaitForExitAsync();

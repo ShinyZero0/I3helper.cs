@@ -7,7 +7,9 @@ namespace I3IPC;
 public class I3Config : Config
 {
     [JsonPropertyName("included_configs")]
-	[JsonInclude]
+    [JsonInclude]
     public Config[] IncludedConfigs;
-	public I3Config(string path) : base(path) {  }
+
+    public I3Config(string path)
+        : base(path) { }
 }

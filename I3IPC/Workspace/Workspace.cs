@@ -10,26 +10,26 @@ public class Workspace
     }
 
     [JsonPropertyName("id")]
-	[JsonInclude]
+    [JsonInclude]
     public long Id;
 
     [JsonPropertyName("num")]
-	[JsonInclude]
+    [JsonInclude]
     public int Num;
 
     [JsonPropertyName("name")]
-	[JsonInclude]
+    [JsonInclude]
     public string Name;
 
     [JsonPropertyName("visible")]
-	[JsonInclude]
+    [JsonInclude]
     public bool IsVisible;
 
     [JsonPropertyName("focused")]
-	[JsonInclude]
+    [JsonInclude]
     public bool IsFocused;
 
     [JsonPropertyName("urgent")]
-	[JsonInclude]
+    [JsonInclude]
     public bool IsUrgent;
 }

@@ -5,11 +5,11 @@ namespace I3IPC;
 public class WindowChanged
 {
     [JsonPropertyName("change")]
-	[JsonInclude]
+    [JsonInclude]
     public ChangeTypes Change;
 
     [JsonPropertyName("container")]
-	[JsonInclude]
+    [JsonInclude]
     public Container Container;
 
     public enum ChangeTypes

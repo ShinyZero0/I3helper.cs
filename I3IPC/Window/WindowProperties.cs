@@ -3,6 +3,6 @@ using System.Text.Json.Serialization;
 public class WindowProperties
 {
     [JsonPropertyName("class")]
-	[JsonInclude]
+    [JsonInclude]
     public string Class;
 }

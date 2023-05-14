@@ -1,16 +1,18 @@
 using System.Text.Json.Serialization;
+
 namespace I3IPC;
+
 public class WorkspaceChanged
 {
     [JsonPropertyName("change")]
-	[JsonInclude]
+    [JsonInclude]
     public string Change;
 
     [JsonPropertyName("old")]
-	[JsonInclude]
+    [JsonInclude]
     public Workspace? OldWorkspace;
 
     [JsonPropertyName("current")]
-	[JsonInclude]
+    [JsonInclude]
     public Workspace? NewWorkspace;
 }

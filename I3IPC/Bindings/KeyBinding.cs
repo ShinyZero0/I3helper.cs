@@ -1,8 +1,10 @@
 using System.Text.Json.Serialization;
+
 namespace I3IPC;
+
 public class KeyBinding
 {
     [JsonPropertyName("command")]
-	[JsonInclude]
+    [JsonInclude]
     public string Command;
 }
