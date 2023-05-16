@@ -1,6 +1,6 @@
 run:
 	-pkill I3IPC
-	dotnet run --project ./src/
+	dotnet run --project ./src/ -- 13131
 
 sln:
 	-pkill I3Helper
