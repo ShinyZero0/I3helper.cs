@@ -28,6 +28,7 @@ public partial class I3
             i3message.Start();
             i3message.WaitForExit();
             string result = i3message.StandardOutput.ReadToEnd();
+            i3message.StandardError.ReadToEnd();
             i3message.Dispose();
             return result;
         }
@@ -62,7 +63,7 @@ public partial class I3
     //     }
     // }
 
-    public async void CheckWorkspaceChanges()
+    public async Task MonitorWorkspaceChangesAsync()
     {
         using (Process sub = NewMessage(Commands.Subscribe("workspace")))
         {
@@ -103,7 +104,7 @@ public partial class I3
         }
     }
 
-    public async void CheckBindings()
+    public async Task CheckBindingsAsync()
     {
         using (Process sub = this.NewMessage(Commands.Subscribe("binding")))
         {
@@ -125,6 +126,9 @@ public partial class I3
             });
             sub.BeginOutputReadLine();
             await sub.WaitForExitAsync().ConfigureAwait(false);
+            sub.CancelOutputRead();
+            await sub.StandardOutput.ReadToEndAsync();
+            await sub.StandardError.ReadToEndAsync();
             disposableSub.Dispose();
         }
     }

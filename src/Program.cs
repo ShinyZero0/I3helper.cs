@@ -1,9 +1,6 @@
 ﻿using System.Text.Json;
 using System.Reactive.Linq;
 
-// using H.Pipes;
-// using H.Formatters;
-
 namespace I3Helper;
 
 internal static class Program
@@ -15,10 +12,10 @@ internal static class Program
             I3Instance.SendMessage("-t get_config --raw")
         )!;
 
-        var wsChecking = Task.Run(() => I3Instance.CheckWorkspaceChanges());
-        var bindChecking = Task.Run(() => I3Instance.CheckBindings());
-        await wsChecking;
-        await bindChecking;
+        Console.WriteLine("starting CheckWorkspaceChangesAsync");
+        Task wschanges = I3Instance.MonitorWorkspaceChangesAsync();
+        // await I3Instance.CheckBindingsAsync();
+        Console.WriteLine("starting webapp");
 
         var builder = WebApplication.CreateBuilder(args);
         var app = builder.Build();
