@@ -14,9 +14,6 @@ internal static class Program
                 "Need the port argument, got either non-number, not enough or too many arguments"
             );
         I3Instance = new();
-        I3Instance.MainConfig = JsonSerializer.Deserialize<I3Config>(
-            I3Instance.SendMessage("-t get_config --raw")
-        )!;
 
         Task wschanges = I3Instance.MonitorWorkspaceChangesAsync();
         // await I3Instance.CheckBindingsAsync();

@@ -18,7 +18,11 @@ public partial class I3
     {
         ConfigDir = Path.Combine(Environment.GetEnvironmentVariable("HOME")!, ".config", "i3");
         GeneratedConfig = new(Path.Combine(ConfigDir, "generated"));
-        SendMessage("-t get_version");
+        // Wait in case i3 don't accepts IPC commands the moment it's started
+        _ = SendMessage("-t get_version");
+        this.MainConfig = JsonSerializer.Deserialize<I3Config>(
+            _ = this.SendMessage("-t get_config --raw")
+        )!;
     }
 
     public string SendMessage(string message)
@@ -142,7 +146,7 @@ public partial class I3
     public void GoToLastWorkspace()
     {
         if (OldWorkspace != null)
-            SendMessage("workspace " + OldWorkspace.Name);
+            _ = SendMessage("workspace " + OldWorkspace.Name);
     }
 
     void DetectByteOrder()
