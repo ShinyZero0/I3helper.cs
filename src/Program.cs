@@ -6,19 +6,20 @@ namespace I3Helper;
 internal static class Program
 {
     static I3 I3Instance;
-    private static async Task<int> Main(string[] args)
+
+    static async Task<int> Main(string[] args)
     {
         if (args.Length != 1 || !int.TryParse(args[0], out _))
-            throw new ArgumentException("Need the port argument, got either non-number, not enough or too many arguments");
+            throw new ArgumentException(
+                "Need the port argument, got either non-number, not enough or too many arguments"
+            );
         I3Instance = new();
         I3Instance.MainConfig = JsonSerializer.Deserialize<I3Config>(
             I3Instance.SendMessage("-t get_config --raw")
         )!;
 
-        Console.WriteLine("starting CheckWorkspaceChangesAsync");
         Task wschanges = I3Instance.MonitorWorkspaceChangesAsync();
         // await I3Instance.CheckBindingsAsync();
-        Console.WriteLine("starting webapp");
 
         var builder = WebApplication.CreateBuilder(args);
         var app = builder.Build();
