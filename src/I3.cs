@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
@@ -143,10 +144,18 @@ public partial class I3
         return JsonSerializer.Deserialize<List<Workspace>>(json)!;
     }
 
-    public void GoToLastWorkspace()
+    public void GoToLastUsedWorkspace()
     {
         if (OldWorkspace != null)
             _ = SendMessage("workspace " + OldWorkspace.Name);
+    }
+
+    public void GoToLastWorkspace()
+    {
+        List<Workspace> workspaces = GetWorkspaces();
+        _ = SendMessage(
+            "workspace " + workspaces.First(ws => ws.Num == workspaces.Max(ws => ws.Num)).Name
+        );
     }
 
     void DetectByteOrder()
