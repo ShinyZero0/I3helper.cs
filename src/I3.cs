@@ -94,9 +94,9 @@ public partial class I3
                     else
                     {
                         this.GeneratedConfig.KeyBindings["Prior"] =
-                            "exec --no-startup-id \"~/.scripts/HalfPage.nu up\"";
+                            "exec --no-startup-id \"nu --no-std-lib ~/.scripts/HalfPage.nu up 5\"";
                         this.GeneratedConfig.KeyBindings["Next"] =
-                            "exec --no-startup-id \"~/.scripts/HalfPage.nu down\"";
+                            "exec --no-startup-id \"nu --no-std-lib ~/.scripts/HalfPage.nu down 5\"";
                         GeneratedConfig.Refresh(this);
                     }
                 }
