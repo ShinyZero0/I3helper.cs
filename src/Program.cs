@@ -20,7 +20,6 @@ internal static class Program
 
         var builder = WebApplication.CreateBuilder(args);
         var app = builder.Build();
-        app.MapPost("/lastusedworkspace", () => I3Instance.GoToLastUsedWorkspace());
         app.MapPost("/lastworkspace", () => I3Instance.GoToLastWorkspace());
         app.Run($"http://localhost:{args[0]}");
 

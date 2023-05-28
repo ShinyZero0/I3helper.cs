@@ -9,10 +9,8 @@ namespace I3Helper;
 
 public partial class I3
 {
-    Workspace? OldWorkspace;
     public I3Config MainConfig;
     GeneratedConfig GeneratedConfig;
-    Dictionary<string, string> Variables = new();
     string ConfigDir;
 
     public I3()
@@ -84,7 +82,6 @@ public partial class I3
                 )!;
                 if (change.Change == "focus")
                 {
-                    OldWorkspace = change.OldWorkspace;
                     if (change.NewWorkspace!.Name == "3")
                     {
                         this.GeneratedConfig.KeyBindings.Remove("Next");
