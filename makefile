@@ -1,5 +1,8 @@
 run:
-	-pkill I3IPC
+	# what you need is:
+	# -pkill I3Helper
+	# while this is for runit(8):
+	-sv down ~/.local/share/service-graphic/i3helper
 	dotnet run --project ./src/ -- 13131
 
 sln:
