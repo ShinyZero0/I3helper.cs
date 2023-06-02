@@ -5,12 +5,10 @@ namespace I3Helper;
 public class Config
 {
     [JsonPropertyName("variable_replaced_contents")]
-    [JsonInclude]
-    public string Content;
+    public string Content { get; set; }
 
     [JsonPropertyName("path")]
-    [JsonInclude]
-    public string Path;
+    public string Path { init; get; }
 
     public Config(string path)
     {

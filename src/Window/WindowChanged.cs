@@ -12,14 +12,34 @@ public class WindowChanged
     [JsonInclude]
     public Container Container;
 
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum ChangeTypes
     {
-        Close,
+        [JsonPropertyName("new")]
         New,
+
+        [JsonPropertyName("close")]
+        Close,
+
+        [JsonPropertyName("focus")]
         Focus,
+
+        [JsonPropertyName("title")]
         Title,
+
+        [JsonPropertyName("move")]
         Move,
+
+        [JsonPropertyName("floating")]
         Floating,
+
+        [JsonPropertyName("fullscreenmode")]
         FullscreenMode,
+
+        [JsonPropertyName("urgent")]
+        Urgent,
+
+        [JsonPropertyName("mark")]
+        Mark
     }
 }
